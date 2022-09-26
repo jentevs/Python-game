@@ -8,7 +8,7 @@ screen = pygame.display.set_mode((1500, 800))
 
 #title and icon
 pygame.display.set_caption("Jumpysploinky")
-icon = pygame.image.load('NewPiskel1.png')
+icon = pygame.image.load('../Src/Img/NewPiskel1.png')
 pygame.display.set_icon(icon)
 
 
