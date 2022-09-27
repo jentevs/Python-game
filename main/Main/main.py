@@ -1,30 +1,39 @@
 import pygame
-
-# intialize the pygame
-pygame.init()
-
-# create the screen
-screen = pygame.display.set_mode((1500, 800))
-
-#title and icon
-pygame.display.set_caption("Jumpysploinky")
-icon = pygame.image.load('../Src/Img/NewPiskel1.png')
-pygame.display.set_icon(icon)
+def startscherm():
+    print("een lijn")
 
 
-#background
+def game():
+    # intialize the pygame
+    pygame.init()
 
-run = True
+    # create the screen
+    screen = pygame.display.set_mode((1500, 800))
 
-# loop
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+    # title and icon
+    pygame.display.set_caption("Jumpysploinky")
+    icon = pygame.image.load('../Src/Img/NewPiskel1.png')
+    pygame.display.set_icon(icon)
 
-    #background color
-    screen.fill((255,255,255))
+    # background
+
+    run = True
+
+    # loop
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        # background color
+        screen.fill((255, 255, 255))
+
+        pygame.display.update()
+
+
+if __name__ == "__main__" :
+    startscherm()
+    game()
 
 
 
-    pygame.display.update()
