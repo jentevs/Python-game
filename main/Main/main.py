@@ -1,7 +1,16 @@
 import pygame
 def startscherm():
     print("een lijn")
-
+    #hier heb je 3 keuzes
+    #1. START
+    #2. SETTINGS
+    #3. STOP
+    #je kan bij settings de grote van de gameWindow aanpassen en de geluid
+def initGame():
+    print("init")
+    #er moete een txt file worden gelezen
+    #de settings die er zijn worden toegepast op de game
+    #scherm grote, geluid
 
 def game():
     # intialize the pygame
