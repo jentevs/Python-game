@@ -13,7 +13,7 @@ def initGame():
     #scherm grote, geluid
 
 def game():
-    # intialize the pygame
+    # initialize the pygame
     pygame.init()
 
     # create the screen
