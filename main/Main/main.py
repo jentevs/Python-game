@@ -1,5 +1,12 @@
 import pygame
+from pygame import mixer
+
+mixer.init()
 def startscherm():
+    mixer.music.load('../Src/Music/Main.mp3')
+    mixer.music.set_volume(0.5)
+    mixer.music.play(loops=True)
+
     print("een lijn")
     #hier heb je 3 keuzes
     #1. START
@@ -7,12 +14,23 @@ def startscherm():
     #3. STOP
     #je kan bij settings de grote van de gameWindow aanpassen en de geluid
     #start scherm liedje
+    mixer.music.stop()
 
 def game():
     #er moete een txt file worden gelezen
     #de settings die er zijn worden toegepast op de game
     #scherm grote, geluid
-    #Eerste lvl Liedje
+    volume_song = 0.5
+    volume_fx = 0.2
+
+    #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/Falling_death.mp3'))
+    #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/gettingHitt.mp3'))
+    #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/pickUpSoundFx.mp3'))
+
+    mixer.Channel(0).play(mixer.Sound('../Src/Music/lvl1.mp3'), loops=True, fade_ms=1500)
+
+    #mixer.music.play(loops=True, fade_ms=25)
+
 
     # initialize the pygame
     pygame.init()
@@ -57,15 +75,16 @@ def game():
                 run = False
             if event.type == pygame.KEYDOWN:
 
-                #jumpy op de X as
+                #jumpy links of rechts
                 if event.key == pygame.K_LEFT:
                     jumpy_changeX =-0.8
                 if event.key == pygame.K_RIGHT:
                     jumpy_changeX =0.8
 
-                # jumpy op de Y as
+                # jumpy op en neer
                 if event.key == pygame.K_UP:
                     jumpy_changeY = -0.6
+                    mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/Jump.mp3'))
                 if event.key == pygame.K_DOWN:
                     jumpy_changeY = 0.6
 
@@ -79,10 +98,9 @@ def game():
         jumpyX += jumpy_changeX
         jumpyY += jumpy_changeY
         func_jumpy(jumpyX, jumpyY)
-
         pygame.display.update()
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     startscherm()
     game()
