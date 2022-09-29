@@ -76,11 +76,11 @@ def game():
                 jumpy_changeX =0
                 jumpy_changeY =0
 
-    jumpyX += jumpy_changeX
-    jumpyY += jumpy_changeY
-    func_jumpy(jumpyX, jumpyY)
+        jumpyX += jumpy_changeX
+        jumpyY += jumpy_changeY
+        func_jumpy(jumpyX, jumpyY)
 
-    pygame.display.update()
+        pygame.display.update()
 
 
 if __name__ == "__main__" :
