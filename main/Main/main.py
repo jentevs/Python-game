@@ -6,11 +6,13 @@ def startscherm():
     #2. SETTINGS
     #3. STOP
     #je kan bij settings de grote van de gameWindow aanpassen en de geluid
+    #start scherm liedje
 
 def game():
     #er moete een txt file worden gelezen
     #de settings die er zijn worden toegepast op de game
     #scherm grote, geluid
+    #Eerste lvl Liedje
 
     # initialize the pygame
     pygame.init()
