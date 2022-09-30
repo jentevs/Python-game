@@ -1,33 +1,86 @@
+import sys
 import pygame
 from pygame import mixer
+from button import Button
+from pygame.locals import *
+pygame.init()
 
+VOLUME_MUSIC = 0.5
+VOLUME_FX = 0.4
 mixer.init()
+
+def settings_menu():
+    print("balls")
+
 def startscherm():
+
     mixer.music.load('../Src/Music/Main.mp3')
-    mixer.music.set_volume(0.5)
+    mixer.music.set_volume(VOLUME_MUSIC)
     mixer.music.play(loops=True, fade_ms=500)
-    pygame.init()
+    pygame.display.set_icon(pygame.image.load('../Src/Img/NewPiskel1.png'))
+
+    #dim of buttons
+    start_pos = pygame.Rect(580,250, 500, 100)
+    settings_pos = pygame.Rect(580,360, 500, 100)
+    quit_pos = pygame.Rect(580,480, 500, 100)
+
+    screen = pygame.display.set_mode((1500, 800))
+    pygame.display.set_caption("Main Menu")
+
 
     run = True
     while run:
-        screen = pygame.display.set_mode((1500, 800))
+
         for event in pygame.event.get():
 
             #maakt het mogelijk afte sluiten
             if event.type == pygame.QUIT:
+                sys.exit()
+
+        screen.blit(pygame.image.load("../Src/Img/startscherm.png"), (0, 0))
+        screen.blit(pygame.image.load("../Src/Img/buttonPlay.png"),(580,250))
+        screen.blit(pygame.image.load("../Src/Img/buttonSetting.png"),(580,360))
+        screen.blit(pygame.image.load("../Src/Img/buttonQuit.png"),(580,480))
+
+        #buttons
+        if event.type == MOUSEBUTTONDOWN:
+            mouse_pos = event.pos
+            if start_pos.collidepoint(mouse_pos):
                 run = False
+            elif settings_pos.collidepoint(mouse_pos):
+
+                while True:
+
+                    screen.fill("black")
+                    screen.blit(pygame.image.load("../Src/Img/startscherm.png"), (0, 0))
+
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            sys.exit()
 
 
-    print("een lijn")
+
+
+
+            elif quit_pos.collidepoint(mouse_pos):
+                sys.exit()
+
+
+
+        pygame.display.update()
+
+
+
+
     #hier heb je 3 keuzes
-    #1. START
-    #2. SETTINGS
-    #3. STOP
+
     #je kan bij settings de grote van de gameWindow aanpassen en de geluid
     #start scherm liedje
     mixer.music.stop()
 
 def game():
+    # initialize the pygame
+    pygame.init()
     #er moete een txt file worden gelezen
     #de settings die er zijn worden toegepast op de game
     #scherm grote, geluid
@@ -44,8 +97,7 @@ def game():
     #mixer.music.play(loops=True, fade_ms=25)
 
 
-    # initialize the pygame
-    pygame.init()
+
 
     # create the screen
     screen = pygame.display.set_mode((1500, 800))
