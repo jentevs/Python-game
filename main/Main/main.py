@@ -20,9 +20,10 @@ def startscherm():
     pygame.display.set_icon(pygame.image.load('../Src/Img/NewPiskel1.png'))
 
     #dim of buttons
-    start_pos = pygame.Rect(580,250, 500, 100)
-    settings_pos = pygame.Rect(580,360, 500, 100)
-    quit_pos = pygame.Rect(580,480, 500, 100)
+    start_pos = pygame.Rect(580,250, 380, 100)
+    settings_pos = pygame.Rect(580,360, 380, 100)
+    quit_pos = pygame.Rect(580,480, 380, 100)
+    back_poss = pygame.Rect(1020,440, 100, 100)
 
     screen = pygame.display.set_mode((1500, 800))
     pygame.display.set_caption("Main Menu")
@@ -53,10 +54,18 @@ def startscherm():
 
                     screen.fill("black")
                     screen.blit(pygame.image.load("../Src/Img/startscherm.png"), (0, 0))
+                    screen.blit(pygame.image.load("../Src/Img/volumeMusic.png"), (580,250))
+                    screen.blit(pygame.image.load("../Src/Img/volumeFx.png"), (580,480))
+                    screen.blit(pygame.image.load("../Src/Img/buttonBack.png"), (1020,440))
 
+                    if event.type == MOUSEBUTTONDOWN:
+                        mouse_pos = event.pos
+                        if back_poss.collidepoint(mouse_pos):
+                            break
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
                             sys.exit()
+                    pygame.display.update()
 
 
 
