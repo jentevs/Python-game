@@ -66,25 +66,9 @@ def startscherm():
                         if event.type == pygame.QUIT:
                             sys.exit()
                     pygame.display.update()
-
-
-
-
-
             elif quit_pos.collidepoint(mouse_pos):
                 sys.exit()
-
-
-
         pygame.display.update()
-
-
-
-
-    #hier heb je 3 keuzes
-
-    #je kan bij settings de grote van de gameWindow aanpassen en de geluid
-    #start scherm liedje
     mixer.music.stop()
 
 def game():
