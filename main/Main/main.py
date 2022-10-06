@@ -76,7 +76,6 @@ def game():
     pygame.init()
     #er moete een txt file worden gelezen
     #de settings die er zijn worden toegepast op de game
-    #scherm grote, geluid
     volume_song = 0.5
     volume_fx = 0.35
     print("testeted;jhvfbjnkdd")
