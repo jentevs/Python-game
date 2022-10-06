@@ -129,8 +129,8 @@ def game():
     #jumpy
     jumpy = pygame.image.load('../Src/Img/jumpy.png')
     Jumping = False
-    x = 50
-    y = 440
+    x = 160
+    y = 680
     width = 83
     height = 56
     vel = 5
@@ -140,24 +140,39 @@ def game():
 
 
     # background
-    background = pygame.image.load("../Src/Img/achtergrond.png")
+    bg = pygame.image.load("../Src/Img/achtergrondWolken.png").convert()
+    bgx = 0
+    bgx2 = bg.get_width()
+    clock = pygame.time.Clock()
+    voorgrond = pygame.image.load("../Src/Img/voorgrond.png")
 
 
     def func_jumpy(x, y):
         screen.blit(jumpy, (x, y))
 
     def func_background():
-        screen.fill((255, 255, 255))
-        screen.blit(background, (0, 0))
-
+        screen.blit(bg, (bgx, 0))
+        screen.blit(bg, (bgx2, 0))
+        screen.blit(voorgrond, (0, 0))
 
 
     run = True
-
+    speed = 30
     # loop
     while run:
-        pygame.time.delay(50)
         func_background()
+        clock.tick(speed)
+        bgx -= 1.4
+        bgx2 -= 1.4
+        if bgx < bg.get_width() * -1:
+            bgx = bg.get_width()
+        if bgx2 < bg.get_width() * -1:
+            bgx2 = bg.get_width()
+
+
+
+        pygame.time.delay(50)
+
 
         for event in pygame.event.get():
 
