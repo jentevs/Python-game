@@ -79,7 +79,7 @@ def game():
     #scherm grote, geluid
     volume_song = 0.5
     volume_fx = 0.35
-    print("test")
+    print("testeted;jhvfbjnkdd")
     #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/Falling_death.mp3'))
     #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/gettingHitt.mp3'))
     #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/pickUpSoundFx.mp3'))
