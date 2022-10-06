@@ -133,16 +133,16 @@ def game():
     y = 680
     width = 83
     height = 56
-    vel = 5
+    snelheid = 5
     Count = 10
 
 
 
 
     # background
-    bg = pygame.image.load("../Src/Img/achtergrondWolken.png").convert()
-    bgx = 0
-    bgx2 = bg.get_width()
+    background = pygame.image.load("../Src/Img/achtergrondWolken.png").convert()
+    backgroundX = 0
+    backgroundX2 = background.get_width()
     clock = pygame.time.Clock()
     voorgrond = pygame.image.load("../Src/Img/voorgrond.png")
 
@@ -151,8 +151,8 @@ def game():
         screen.blit(jumpy, (x, y))
 
     def func_background():
-        screen.blit(bg, (bgx, 0))
-        screen.blit(bg, (bgx2, 0))
+        screen.blit(background, (backgroundX, 0))
+        screen.blit(background, (backgroundX2, 0))
         screen.blit(voorgrond, (0, 0))
 
 
@@ -162,12 +162,12 @@ def game():
     while run:
         func_background()
         clock.tick(speed)
-        bgx -= 1.4
-        bgx2 -= 1.4
-        if bgx < bg.get_width() * -1:
-            bgx = bg.get_width()
-        if bgx2 < bg.get_width() * -1:
-            bgx2 = bg.get_width()
+        backgroundX -= 1.4
+        backgroundX2 -= 1.4
+        if backgroundX < background.get_width() * -1:
+            backgroundX = background.get_width()
+        if backgroundX2 < background.get_width() * -1:
+            backgroundX2 = background.get_width()
 
 
 
@@ -180,10 +180,10 @@ def game():
             if event.type == pygame.QUIT:
                 run = False
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and x > vel:
-            x -= vel
-        if keys[pygame.K_RIGHT] and x < 1500 - width - vel:
-            x += vel
+        if keys[pygame.K_LEFT] and x > snelheid:
+            x -= snelheid
+        if keys[pygame.K_RIGHT] and x < 1500 - width - snelheid:
+            x += snelheid
         #springen
         if not(Jumping):
             if keys[pygame.K_SPACE]:
