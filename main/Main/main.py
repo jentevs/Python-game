@@ -1,7 +1,6 @@
 import sys
 import pygame
 from pygame import mixer
-from button import Button
 from pygame.locals import *
 pygame.init()
 
@@ -13,6 +12,9 @@ def settings_menu():
     print("balls")
 
 def startscherm():
+    active = False
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
 
     mixer.music.load('../Src/Music/Main.mp3')
     mixer.music.set_volume(VOLUME_MUSIC)
@@ -20,10 +22,14 @@ def startscherm():
     pygame.display.set_icon(pygame.image.load('../Src/Img/NewPiskel1.png'))
 
     #dim of buttons
-    start_pos = pygame.Rect(580,250, 380, 100)
-    settings_pos = pygame.Rect(580,360, 380, 100)
-    quit_pos = pygame.Rect(580,480, 380, 100)
-    back_poss = pygame.Rect(1020,440, 100, 100)
+    start_pos = pygame.Rect(580,250, 390, 113)
+    settings_pos = pygame.Rect(580,360, 390, 113)
+    quit_pos = pygame.Rect(580,480, 390, 113)
+    back_poss = pygame.Rect(1020,440, 69, 76)
+
+    #dim of input txt
+    sound_fx_txt = pygame.Rect(590,400, 389, 131)
+    music_vol_txt = pygame.Rect(590,250, 389,131)
 
     screen = pygame.display.set_mode((1500, 800))
     pygame.display.set_caption("Main Menu")
@@ -51,15 +57,35 @@ def startscherm():
             elif settings_pos.collidepoint(mouse_pos):
 
                 while True:
-
+                    #In de settings
                     screen.fill("black")
                     screen.blit(pygame.image.load("../Src/Img/startscherm.png"), (0, 0))
-                    screen.blit(pygame.image.load("../Src/Img/volumeMusic.png"), (580,250))
-                    screen.blit(pygame.image.load("../Src/Img/volumeFx.png"), (580,480))
+                    screen.blit(pygame.image.load("../Src/Img/volumeMusic.png"), (590,250))
+                    screen.blit(pygame.image.load("../Src/Img/volumeFx.png"), (590,400))
                     screen.blit(pygame.image.load("../Src/Img/buttonBack.png"), (1020,440))
 
                     if event.type == MOUSEBUTTONDOWN:
                         mouse_pos = event.pos
+
+                        #voor de txtbalk
+                        if music_vol_txt.collidepoint(event.pos):
+                            # Toggle the active variable.
+                            active = not active
+                        else:
+                            active = False
+                            # Change the current color of the input box.
+                        color = color_active if active else color_inactive
+                        if event.type == pygame.KEYDOWN:
+                            if active:
+                                if event.key == pygame.K_RETURN:
+                                    print(text)
+                                    text = ''
+                                elif event.key == pygame.K_BACKSPACE:
+                                    text = text[:-1]
+                                else:
+                                    text += event.unicode
+
+                        #voor terug te gaan
                         if back_poss.collidepoint(mouse_pos):
                             break
                     for event in pygame.event.get():
@@ -91,11 +117,11 @@ def game():
 
 
 
-    # create the screen
+    #create the screen
     screen = pygame.display.set_mode((1500, 800))
 
 
-    # title and icon
+    #title and icon
     pygame.display.set_caption("Jumpysploinky")
     icon = pygame.image.load('../Src/Img/NewPiskel1.png')
     pygame.display.set_icon(icon)
