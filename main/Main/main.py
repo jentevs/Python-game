@@ -128,58 +128,102 @@ def game():
 
     #jumpy
     jumpy = pygame.image.load('../Src/Img/jumpy.png')
-    jumpyX = 300
-    jumpyY = 300
-    jumpy_changeX = 0
-    jumpy_changeY = 0
+    Jumping = False
+    x = 160
+    y = 680
+    width = 83
+    height = 56
+    snelheid = 5
+    Count = 10
+
+
+
+
     # background
-    background = pygame.image.load("../Src/Img/achtergrond.png")
+    background = pygame.image.load("../Src/Img/achtergrondWolken.png").convert()
+    backgroundX = 0
+    backgroundX2 = background.get_width()
+    clock = pygame.time.Clock()
+    voorgrond = pygame.image.load("../Src/Img/voorgrond.png")
+
 
     def func_jumpy(x, y):
         screen.blit(jumpy, (x, y))
 
     def func_background():
-        screen.fill((255, 255, 255))
-        screen.blit(background, (0, 0))
-
+        screen.blit(background, (backgroundX, 0))
+        screen.blit(background, (backgroundX2, 0))
+        screen.blit(voorgrond, (0, 0))
 
 
     run = True
-
+    speed = 30
     # loop
     while run:
         func_background()
+        clock.tick(speed)
+        backgroundX -= 1.4
+        backgroundX2 -= 1.4
+        if backgroundX < background.get_width() * -1:
+            backgroundX = background.get_width()
+        if backgroundX2 < background.get_width() * -1:
+            backgroundX2 = background.get_width()
+
+
+
+        pygame.time.delay(50)
+
 
         for event in pygame.event.get():
 
             #maakt het mogelijk afte sluiten
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.KEYDOWN:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and x > snelheid:
+            x -= snelheid
+        if keys[pygame.K_RIGHT] and x < 1500 - width - snelheid:
+            x += snelheid
+        #springen
+        if not(Jumping):
+            if keys[pygame.K_SPACE]:
+                mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/Jump.mp3'))
+                Jumping = True
 
-                #jumpy links of rechts
-                if event.key == pygame.K_LEFT:
-                    jumpy_changeX =-0.8
-                if event.key == pygame.K_RIGHT:
-                    jumpy_changeX =0.8
+        else:
+            if Count >= -10:
+                negaftief = 1
+                if Count < 0:
+                    negaftief = -1
 
-                # jumpy op en neer
-                if event.key == pygame.K_UP:
-                    jumpy_changeY = -0.6
-                    mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/Jump.mp3'))
-                if event.key == pygame.K_DOWN:
-                    jumpy_changeY = 0.6
+                y -= (Count ** 2) * 0.5 * negaftief
+                Count -= 1
+            else:
+                Jumping = False
+                Count = 10
 
-                #jumpy springt
+
+
+
+
+
+
+
+
+
+
+
 
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 jumpy_changeX =0
-                jumpy_changeY =0
 
-        jumpyX += jumpy_changeX
-        jumpyY += jumpy_changeY
-        func_jumpy(jumpyX, jumpyY)
+
+
+
+
+
+        func_jumpy(x, y)
         pygame.display.update()
 
 
