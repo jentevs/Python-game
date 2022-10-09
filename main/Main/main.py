@@ -67,24 +67,6 @@ def startscherm():
                     if event.type == MOUSEBUTTONDOWN:
                         mouse_pos = event.pos
 
-                        #voor de txtbalk
-                        if music_vol_txt.collidepoint(event.pos):
-                            # Toggle the active variable.
-                            active = not active
-                        else:
-                            active = False
-                            # Change the current color of the input box.
-                        color = color_active if active else color_inactive
-                        if event.type == pygame.KEYDOWN:
-                            if active:
-                                if event.key == pygame.K_RETURN:
-                                    print(text)
-                                    text = ''
-                                elif event.key == pygame.K_BACKSPACE:
-                                    text = text[:-1]
-                                else:
-                                    text += event.unicode
-
                         #voor terug te gaan
                         if back_poss.collidepoint(mouse_pos):
                             break
