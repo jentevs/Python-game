@@ -22,7 +22,10 @@ def startscherm():
     pygame.display.set_icon(pygame.image.load('../Src/Img/NewPiskel1.png'))
 
     #dim of buttons
-
+    start_pos = pygame.Rect(580,250, 390, 113)
+    settings_pos = pygame.Rect(580,360, 390, 113)
+    quit_pos = pygame.Rect(580,480, 390, 113)
+    back_poss = pygame.Rect(1020,440, 69, 76)
 
     #dim of input txt
     sound_fx_txt = pygame.Rect(590,400, 389, 131)
