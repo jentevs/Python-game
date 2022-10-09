@@ -205,15 +205,6 @@ def game():
 
 
 
-
-
-
-
-
-
-
-
-
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 jumpy_changeX =0
