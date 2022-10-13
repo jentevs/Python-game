@@ -127,8 +127,8 @@ def game():
     #platformen x-as, y-as, breedte platform, dikte platform
     platform_candy = pygame.image.load("../Src/Img/platform.png")
     platforms = [[175, 480, 70, 10], [85, 370, 70, 10],
-                 [265, 350, 70, 10], [175, 260, 70, 10],
-                 [85, 480, 70, 10], [265, 150, 70, 10]]
+                 [500, 350, 70, 10], [175, 260, 70, 10],
+                 [85, 480, 70, 10], [800, 150, 70, 10]]
 
     # jump and movement up down
     jump = False
@@ -286,9 +286,11 @@ def game():
                 #Key left
                 if event.key == pygame.K_LEFT and not game_over:
                     x_change = - player_speed
+                    player =pygame.transform.scale(pygame.image.load('../Src/Img/left_jumpy.png'), (player_width, player_height))
                 #Key right
                 if event.key == pygame.K_RIGHT and not game_over:
                     x_change = player_speed
+                    player =pygame.transform.scale(pygame.image.load('../Src/Img/right_jumpy.png'), (player_width, player_height))
             #Key not pressed anny more
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
