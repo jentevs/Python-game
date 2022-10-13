@@ -10,7 +10,7 @@ VOLUME_FX = 0.4
 mixer.init()
 
 def settings_menu():
-    print("balls")
+    print("b")
 
 def startscherm():
     active = False
