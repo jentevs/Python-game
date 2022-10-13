@@ -1,5 +1,6 @@
 import sys
 import pygame
+import random
 from pygame import mixer
 from pygame.locals import *
 pygame.init()
@@ -98,69 +99,125 @@ def startscherm():
     mixer.music.stop()
 
 def game():
-    # initialize the pygame
-    pygame.init()
-    #er moete een txt file worden gelezen
-    #de settings die er zijn worden toegepast op de game
-    volume_song = 0.5
-    volume_fx = 0.35
-    print("testeted;jhvfbjnkdd")
-    #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/Falling_death.mp3'))
-    #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/gettingHitt.mp3'))
-    #mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/pickUpSoundFx.mp3'))
-    mixer.Channel(1).set_volume(volume_fx)
-    mixer.Channel(0).set_volume(volume_song)
-    mixer.Channel(0).play(mixer.Sound('../Src/Music/lvl1.mp3'), loops=True, fade_ms=1500)
+    #######################################################################################
+    #                                  VARIABLE                                           #
+    #######################################################################################
 
-    #mixer.music.play(loops=True, fade_ms=25)
+    #speedzz
+    speed_BG = 100
+    timer = pygame.time.Clock()
 
+    # fonts and colors
+    font = pygame.font.Font('freesansbold.ttf', 20)
+    BLACK = (0, 0, 0)
+    BLUE_SKY = (174, 251, 255)
 
+    # score
+    score = 0
+    high_score = 0
 
-
-    #create the screen
-    screen = pygame.display.set_mode((1500, 800))
-
-
-    #title and icon
-    pygame.display.set_caption("Jumpysploinky")
-    icon = pygame.image.load('../Src/Img/NewPiskel1.png')
-    pygame.display.set_icon(icon)
-
-    #jumpy
-    jumpy = pygame.image.load('../Src/Img/jumpy.png')
-    Jumping = False
-    x = 160
-    y = 680
-    width = 83
-    height = 56
-    snelheid = 5
-    Count = 10
+    # player + possition
+    player = pygame.transform.scale(pygame.image.load('../Src/Img/jumpy.png'), (90, 70))
+    MiniBean = pygame.transform
+    player_x = 170
+    player_y = 400
 
 
+    #platformen x-as, y-as, breedte platform, dikte platform
+    platform_candy = pygame.image.load("../Src/Img/platform.png")
+    platforms = [[175, 480, 70, 10], [85, 370, 70, 10],
+                 [265, 350, 70, 10], [175, 260, 70, 10],
+                 [85, 480, 70, 10], [265, 150, 70, 10]]
 
+    # jump and movement up down
+    jump = False
+    y_change = 0
+
+    # movement left right <- ->, and speed off the movement
+    x_change = 0
+    player_speed = 3
+
+    # create the screen
+    SCREEN_WIDTH = 1500
+    SCREEN_HEIGHT = 800
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption('jumpy jumper')
 
     # background
     background = pygame.image.load("../Src/Img/achtergrondWolken.png").convert()
     backgroundX = 0
     backgroundX2 = background.get_width()
+
+    #speed of background clouds
     clock = pygame.time.Clock()
+    speed = 30
+
+    #forground landscape
     voorgrond = pygame.image.load("../Src/Img/voorgrond.png")
 
+    # game_over
+    game_over = False
+    game_over_screen = pygame.image.load("../Src/Img/game_Over_Screen.png")
 
-    def func_jumpy(x, y):
-        screen.blit(jumpy, (x, y))
 
-    def func_background():
+    #######################################################################################
+    #                                  FUNCTIONS                                          #
+    #######################################################################################
+
+    #checks if player X and Y coordinats collide with platform
+    def FUNC_collisionCheck(platform_list, jump, player_x, player_y, y_change):
+        for i in range(len(platform_list)):
+            if platform_list[i].colliderect([player_x, player_y + 60, 90, 5]) and jump == False and y_change > 0:
+                jump = True
+        return jump, player_x, player_y, y_change
+
+    #makes players jump
+    def FUNC_playerMovement(player_y, jump, y_change):
+        jump_height = 12
+        gravity = .4
+        if jump:
+            y_change = -jump_height
+            jump = False
+        player_y += y_change
+        y_change += gravity
+        return player_y, jump, y_change
+
+    # platform
+    def FUNC_platforms(platforms, player_y, y_change, score):
+        if player_y < 250 and y_change < 0:
+            for i in range(len(platform_list)):
+                platforms[i][1] -= y_change
+            else:
+                pass
+            for item in range(len(platform_list)):
+                # bodem scherm
+                if platforms[item][1] > 500:
+                    # nieuwe platformen  x-as, y-as, breedte platform, dikte platform
+                    platforms[item] = [random.randint(200, 1400), random.randint(20, 60), 70, 10]
+                    score += 1
+        return platforms, score
+
+    # background and forground
+    def FUNC_background():
         screen.blit(background, (backgroundX, 0))
         screen.blit(background, (backgroundX2, 0))
         screen.blit(voorgrond, (0, 0))
 
+    #game loop
+    running = True
+    while running:
+        #when you want to quit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    run = True
-    speed = 30
-    # loop
-    while run:
-        func_background()
+        platform_list = []
+
+
+
+        # background
+        FUNC_background()
+        #moving background
         clock.tick(speed)
         backgroundX -= 1.4
         backgroundX2 -= 1.4
@@ -168,63 +225,75 @@ def game():
             backgroundX = background.get_width()
         if backgroundX2 < background.get_width() * -1:
             backgroundX2 = background.get_width()
+        timer.tick(speed_BG)
 
+        screen.blit(player, (player_x, player_y))
 
+        #score ---> tekst op scherm
+        score_tekst = font.render('High Score: ' + str(high_score), True, BLACK, BLUE_SKY)
+        screen.blit(score_tekst, (SCREEN_WIDTH - 200, 20))
+        high_score_tekst = font.render('Score: ' + str(score), True, BLACK, BLUE_SKY)
+        screen.blit(high_score_tekst, (SCREEN_WIDTH - 150, 50))
 
-        pygame.time.delay(50)
-
-
-        for event in pygame.event.get():
-
-            #maakt het mogelijk afte sluiten
-            if event.type == pygame.QUIT:
-                run = False
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and x > snelheid:
-            x -= snelheid
-        if keys[pygame.K_RIGHT] and x < 1500 - width - snelheid:
-            x += snelheid
-        #springen
-        if not(Jumping):
-            if keys[pygame.K_SPACE]:
-                mixer.Channel(1).play(mixer.Sound('../Src/SoundFx/Jump.mp3'))
-                Jumping = True
-
+        # game over
+        if game_over:
+            screen.blit(game_over_screen, (0, 0))
         else:
-            if Count >= -10:
-                negaftief = 1
-                if Count < 0:
-                    negaftief = -1
-
-                y -= (Count ** 2) * 0.5 * negaftief
-                Count -= 1
-            else:
-                Jumping = False
-                Count = 10
+            for i in range(len(platforms)):
+                platform = screen.blit(platform_candy, (platforms[i][0], platforms[i][1]))
+                platform_list.append(platform)
 
 
 
 
+            # when key is pressed
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP and game_over:
+                    game_over = False
+                    # score = 0
+                    player_x = 170
+                    player_y = 400
 
+                    platforms = [[175, 480, 70, 10], [85, 370, 70, 10],
+                                 [265, 480, 70, 10], [175, 260, 70, 10],
+                                 [85, 480, 70, 10], [265, 150, 70, 10]]
+                #Key left
+                if event.key == pygame.K_LEFT and not game_over:
+                    x_change = - player_speed
+                #Key right
+                if event.key == pygame.K_RIGHT and not game_over:
+                    x_change = player_speed
+            #Key not pressed anny more
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    x_change = - 0
+                if event.key == pygame.K_RIGHT:
+                    x_change = 0
 
+        jump, player_x, player_y, y_change = FUNC_collisionCheck(platform_list, jump, player_x, player_y, y_change)
+        player_x += x_change
 
+        if player_y < SCREEN_WIDTH - 50:
+            player_y, jump, y_change = FUNC_playerMovement(player_y, jump, y_change)
+        else:
+            game_over = True
+            y_change = 0
+            x_change = 0
 
+        # updates platformen
+        platforms, score = FUNC_platforms(platforms, player_y, y_change, score)
 
+        # boundries left and rechts
+        if player_x < -3:
+            player_x = -3
+        elif player_x > SCREEN_WIDTH - 50:
+            player_x = SCREEN_WIDTH - 50
 
+        if score > high_score:
+            high_score = score
 
-
-
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                jumpy_changeX =0
-
-
-
-
-
-
-        func_jumpy(x, y)
         pygame.display.update()
+    pygame.quit()
 
 
 if __name__ == "__main__":
