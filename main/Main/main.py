@@ -168,6 +168,8 @@ def game():
     MiniBean_x = random.randint(60, 1400 )
     MiniBean_y = random.randint(10, 500)
 
+    #stiky top
+    sticky_top = pygame.image.load('../Src/Img/sticky_top.png')
     #######################################################################################
     #                                  FUNCTIONS                                          #
     #######################################################################################
@@ -191,7 +193,7 @@ def game():
         return player_y, jump, y_change
 
     # platform
-    def FUNC_platforms(platforms, player_y, y_change, score):
+    def FUNC_platforms(platforms, player_y, y_change):
         if player_y < 250 and y_change < 0:
             for i in range(len(platform_list)):
                 platforms[i][1] -= y_change
@@ -202,8 +204,8 @@ def game():
                 if platforms[item][1] > 500:
                     # nieuwe platformen  x-as, y-as, breedte platform, dikte platform
                     platforms[item] = [random.randint(200, 1400), random.randint(20, 60), 70, 10]
-                    score += 1
-        return platforms, score
+
+        return platforms
 
     # background and forground
     def FUNC_background():
@@ -211,9 +213,10 @@ def game():
         screen.blit(background, (backgroundX2, 0))
         screen.blit(voorgrond, (0, 0))
 
-    def FUNC_MiniBeans(MiniBean_x, MiniBean_y, player_x, player_y, MiniBean_Width, MiniBean_height, player_height, player_width ):
+    def FUNC_MiniBeans(MiniBean_x, MiniBean_y, player_x, player_y, MiniBean_Width, MiniBean_height, player_height, player_width):
         if(player_x - MiniBean_x)<= MiniBean_Width and (MiniBean_x - player_x )<=player_width:
             if(player_y-MiniBean_y)<= MiniBean_height and (MiniBean_y -player_y)<=player_height:
+
                 return True
         return False
 
@@ -245,10 +248,13 @@ def game():
         if(FUNC_MiniBeans(MiniBean_x, MiniBean_y, player_x, player_y, MiniBean_Width, MiniBean_height, player_height, player_width )):
             MiniBean_x = random.randint(60, 1400)
             MiniBean_y = random.randint(10, 500)
+            score += 1
 
+
+        #blits
         screen.blit(MiniBean, (MiniBean_x, MiniBean_y))
         screen.blit(player, (player_x, player_y))
-
+        screen.blit(sticky_top, (0,0))
         #score ---> tekst op scherm
         score_tekst = font.render('High Score: ' + str(high_score), True, BLACK, BLUE_SKY)
         screen.blit(score_tekst, (SCREEN_WIDTH - 200, 20))
@@ -301,13 +307,16 @@ def game():
             x_change = 0
 
         # updates platformen
-        platforms, score = FUNC_platforms(platforms, player_y, y_change, score)
+        platforms = FUNC_platforms(platforms, player_y, y_change)
 
         # boundries left and rechts
         if player_x < -3:
             player_x = -3
         elif player_x > SCREEN_WIDTH - 50:
             player_x = SCREEN_WIDTH - 50
+        # boundries top
+        if player_y <= 10:
+            player_y = 10
 
         if score > high_score:
             high_score = score
