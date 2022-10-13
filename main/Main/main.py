@@ -103,6 +103,7 @@ def game():
     #                                  VARIABLE                                           #
     #######################################################################################
 
+
     #speedzz
     speed_BG = 100
     timer = pygame.time.Clock()
@@ -111,6 +112,7 @@ def game():
     font = pygame.font.Font('freesansbold.ttf', 20)
     BLACK = (0, 0, 0)
     BLUE_SKY = (174, 251, 255)
+    COOKIE_BROWN =(201, 133, 94)
 
     # score
     score = 0
@@ -126,7 +128,7 @@ def game():
 
     #platformen x-as, y-as, breedte platform, dikte platform
     platform_candy = pygame.image.load("../Src/Img/platform.png")
-    platforms = [[175, 480, 70, 10], [85, 370, 70, 10],
+    platforms = [[600, 480, 70, 10],
                  [500, 350, 70, 10], [175, 260, 70, 10],
                  [85, 480, 70, 10], [800, 150, 70, 10]]
 
@@ -177,7 +179,7 @@ def game():
     #checks if player X and Y coordinats collide with platform
     def FUNC_collisionCheck(platform_list, jump, player_x, player_y, y_change):
         for i in range(len(platform_list)):
-            if platform_list[i].colliderect([player_x, player_y + 60, 90, 5]) and jump == False and y_change > 0:
+            if platform_list[i].colliderect([player_x, player_y + 30, 50, 5]) and jump == False and y_change > 0:
                 jump = True
         return jump, player_x, player_y, y_change
 
@@ -264,25 +266,30 @@ def game():
         # game over
         if game_over:
             screen.blit(game_over_screen, (0, 0))
+            score_tekst = font.render('High Score: ' + str(high_score), True, BLACK, COOKIE_BROWN)
+            screen.blit(score_tekst, (SCREEN_WIDTH - 780, 500))
+            high_score_tekst = font.render('Score: ' + str(score), True, BLACK, COOKIE_BROWN)
+            screen.blit(high_score_tekst, (SCREEN_WIDTH - 730, 530))
+
+            # when key is pressed
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP and game_over == True:
+                    game_over = False
+                    score = 0
+                    player_x = 170
+                    player_y = 400
+
+                    platforms = [[600, 480, 70, 10],
+                                 [500, 350, 70, 10], [175, 260, 70, 10],
+                                 [85, 480, 70, 10], [800, 150, 70, 10]]
         else:
             for i in range(len(platforms)):
                 platform = screen.blit(platform_candy, (platforms[i][0], platforms[i][1]))
                 platform_list.append(platform)
 
-
-
-
             # when key is pressed
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP and game_over:
-                    game_over = False
-                    # score = 0
-                    player_x = 170
-                    player_y = 400
 
-                    platforms = [[175, 480, 70, 10], [85, 370, 70, 10],
-                                 [265, 480, 70, 10], [175, 260, 70, 10],
-                                 [85, 480, 70, 10], [265, 150, 70, 10]]
                 #Key left
                 if event.key == pygame.K_LEFT and not game_over:
                     x_change = - player_speed
@@ -291,6 +298,7 @@ def game():
                 if event.key == pygame.K_RIGHT and not game_over:
                     x_change = player_speed
                     player =pygame.transform.scale(pygame.image.load('../Src/Img/right_jumpy.png'), (player_width, player_height))
+
             #Key not pressed anny more
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
