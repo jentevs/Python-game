@@ -117,8 +117,9 @@ def game():
     high_score = 0
 
     # player + possition
-    player = pygame.transform.scale(pygame.image.load('../Src/Img/jumpy.png'), (90, 70))
-    MiniBean = pygame.transform
+    player_height= 70
+    player_width = 90
+    player = pygame.transform.scale(pygame.image.load('../Src/Img/jumpy.png'), (player_width, player_height))
     player_x = 170
     player_y = 400
 
@@ -159,6 +160,13 @@ def game():
     game_over = False
     game_over_screen = pygame.image.load("../Src/Img/game_Over_Screen.png")
 
+    #Mini beans
+    step = 5
+    MiniBean_height= 30
+    MiniBean_Width = 50
+    MiniBean = pygame.transform.scale(pygame.image.load('../Src/Img/MiniBean.png'), (MiniBean_Width, MiniBean_height))
+    MiniBean_x = random.randint(60, 1400 )
+    MiniBean_y = random.randint(10, 500)
 
     #######################################################################################
     #                                  FUNCTIONS                                          #
@@ -203,6 +211,13 @@ def game():
         screen.blit(background, (backgroundX2, 0))
         screen.blit(voorgrond, (0, 0))
 
+    def FUNC_MiniBeans(MiniBean_x, MiniBean_y, player_x, player_y, MiniBean_Width, MiniBean_height, player_height, player_width ):
+        if(player_x - MiniBean_x)<= MiniBean_Width and (MiniBean_x - player_x )<=player_width:
+            if(player_y-MiniBean_y)<= MiniBean_height and (MiniBean_y -player_y)<=player_height:
+                return True
+        return False
+
+
     #game loop
     running = True
     while running:
@@ -227,6 +242,11 @@ def game():
             backgroundX2 = background.get_width()
         timer.tick(speed_BG)
 
+        if(FUNC_MiniBeans(MiniBean_x, MiniBean_y, player_x, player_y, MiniBean_Width, MiniBean_height, player_height, player_width )):
+            MiniBean_x = random.randint(60, 1400)
+            MiniBean_y = random.randint(10, 500)
+
+        screen.blit(MiniBean, (MiniBean_x, MiniBean_y))
         screen.blit(player, (player_x, player_y))
 
         #score ---> tekst op scherm
