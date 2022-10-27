@@ -176,6 +176,7 @@ def game():
     #                                  FUNCTIONS                                          #
     #######################################################################################
 
+
     #checks if player X and Y coordinats collide with platform
     def FUNC_collisionCheck(platform_list, jump, player_x, player_y, y_change):
         for i in range(len(platform_list)):
@@ -222,6 +223,11 @@ def game():
                 return True
         return False
 
+    #play the musc
+    mixer.music.load('../Src/Music/lvl1.mp3')
+    mixer.music.set_volume(VOLUME_MUSIC)
+    mixer.music.play(loops=True, fade_ms=500)
+
 
     #game loop
     running = True
@@ -232,8 +238,6 @@ def game():
                 running = False
 
         platform_list = []
-
-
 
         # background
         FUNC_background()
