@@ -313,6 +313,12 @@ def game():
 
             # when key is pressed
             if event.type == pygame.KEYDOWN:
+
+                # teleport
+                if event.key == pygame.K_DOWN and not game_over:
+                    player_x = 1100
+                    player_y = 100
+
                 #Key left
                 if event.key == pygame.K_LEFT and not game_over:
                     x_change = - player_speed_left
