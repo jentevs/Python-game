@@ -113,10 +113,15 @@ def game():
     BLACK = (0, 0, 0)
     BLUE_SKY = (174, 251, 255)
     COOKIE_BROWN =(201, 133, 94)
+    GRAY_AUTUMN = (222,222,222)
 
     # score
     score = 0
     high_score = 0
+    level_2_min = 2
+    level_2_max = 5
+    BACK_SCORE = BLUE_SKY
+
 
     # player + possition
     player_height= 70
@@ -124,7 +129,10 @@ def game():
     player = pygame.transform.scale(pygame.image.load('../Src/Img/jumpy.png'), (player_width, player_height))
     player_x = 170
     player_y = 400
-
+    player_speed_left = 6
+    player_speed_right = 6
+    player_rust_left = 0
+    player_rust_right = 0
 
     #platformen x-as, y-as, breedte platform, dikte platform
     platform_candy = pygame.image.load("../Src/Img/platform.png")
@@ -138,7 +146,7 @@ def game():
 
     # movement left right <- ->, and speed off the movement
     x_change = 0
-    player_speed = 3
+    player_speed = 6
 
     # create the screen
     SCREEN_WIDTH = 1500
@@ -150,6 +158,7 @@ def game():
     background = pygame.image.load("../Src/Img/achtergrondWolken.png").convert()
     backgroundX = 0
     backgroundX2 = background.get_width()
+    backgroundSpeed= 1.4
 
     #speed of background clouds
     clock = pygame.time.Clock()
@@ -167,11 +176,16 @@ def game():
     MiniBean_height= 30
     MiniBean_Width = 50
     MiniBean = pygame.transform.scale(pygame.image.load('../Src/Img/MiniBean.png'), (MiniBean_Width, MiniBean_height))
-    MiniBean_x = random.randint(60, 1400 )
-    MiniBean_y = random.randint(10, 500)
+    MiniBean_x = random.randint(100, 1300 )
+    MiniBean_y = random.randint(20, 300)
 
     #stiky top
     sticky_top = pygame.image.load('../Src/Img/sticky_top.png')
+
+    # wolken
+    wolk = pygame.image.load('../Src/Img/wolkje.png')
+    wolk_x= 1100
+    wolk_y = 50
     #######################################################################################
     #                                  FUNCTIONS                                          #
     #######################################################################################
@@ -224,9 +238,9 @@ def game():
         return False
 
     #play the musc
-    mixer.music.load('../Src/Music/lvl1.mp3')
-    mixer.music.set_volume(VOLUME_MUSIC)
-    mixer.music.play(loops=True, fade_ms=500)
+    #mixer.music.load('../Src/Music/lvl1.mp3')
+    #mixer.music.set_volume(VOLUME_MUSIC)
+    #mixer.music.play(loops=True, fade_ms=500)
 
 
     #game loop
@@ -243,8 +257,8 @@ def game():
         FUNC_background()
         #moving background
         clock.tick(speed)
-        backgroundX -= 1.4
-        backgroundX2 -= 1.4
+        backgroundX -= backgroundSpeed
+        backgroundX2 -= backgroundSpeed
         if backgroundX < background.get_width() * -1:
             backgroundX = background.get_width()
         if backgroundX2 < background.get_width() * -1:
@@ -262,12 +276,12 @@ def game():
         screen.blit(player, (player_x, player_y))
         screen.blit(sticky_top, (0,0))
         #score ---> tekst op scherm
-        score_tekst = font.render('High Score: ' + str(high_score), True, BLACK, BLUE_SKY)
+        score_tekst = font.render('High Score: ' + str(high_score), True, BLACK, BACK_SCORE)
         screen.blit(score_tekst, (SCREEN_WIDTH - 200, 20))
-        high_score_tekst = font.render('Score: ' + str(score), True, BLACK, BLUE_SKY)
+        high_score_tekst = font.render('Score: ' + str(score), True, BLACK, BACK_SCORE)
         screen.blit(high_score_tekst, (SCREEN_WIDTH - 150, 50))
 
-        # game over
+        # game over reset
         if game_over:
             screen.blit(game_over_screen, (0, 0))
             score_tekst = font.render('High Score: ' + str(high_score), True, BLACK, COOKIE_BROWN)
@@ -286,6 +300,12 @@ def game():
                     platforms = [[600, 480, 70, 10],
                                  [500, 350, 70, 10], [175, 260, 70, 10],
                                  [85, 480, 70, 10], [800, 150, 70, 10]]
+                    BACK_SCORE = BLUE_SKY
+                    background = pygame.image.load("../Src/Img/achtergrondWolken.png").convert()
+                    player_speed_left = 6
+                    player_speed_right = 6
+                    player_rust_right = 0
+
         else:
             for i in range(len(platforms)):
                 platform = screen.blit(platform_candy, (platforms[i][0], platforms[i][1]))
@@ -293,22 +313,22 @@ def game():
 
             # when key is pressed
             if event.type == pygame.KEYDOWN:
-
                 #Key left
                 if event.key == pygame.K_LEFT and not game_over:
-                    x_change = - player_speed
+                    x_change = - player_speed_left
                     player =pygame.transform.scale(pygame.image.load('../Src/Img/left_jumpy.png'), (player_width, player_height))
                 #Key right
                 if event.key == pygame.K_RIGHT and not game_over:
-                    x_change = player_speed
+                    x_change = player_speed_right
                     player =pygame.transform.scale(pygame.image.load('../Src/Img/right_jumpy.png'), (player_width, player_height))
+
 
             #Key not pressed anny more
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
-                    x_change = - 0
+                    x_change = - player_rust_left
                 if event.key == pygame.K_RIGHT:
-                    x_change = 0
+                    x_change = player_rust_right
 
         jump, player_x, player_y, y_change = FUNC_collisionCheck(platform_list, jump, player_x, player_y, y_change)
         player_x += x_change
@@ -324,16 +344,36 @@ def game():
         platforms = FUNC_platforms(platforms, player_y, y_change)
 
         # boundries left and rechts
-        if player_x < -3:
-            player_x = -3
-        elif player_x > SCREEN_WIDTH - 50:
+        if player_x < -3 :
             player_x = SCREEN_WIDTH - 50
+        elif player_x > SCREEN_WIDTH - 50:
+            player_x = -3
         # boundries top
         if player_y <= 10:
             player_y = 10
 
         if score > high_score:
             high_score = score
+
+        #verschillende niv
+        if score >= level_2_min and score < level_2_max:
+            # wind herfst
+            #img en blits
+            background = pygame.image.load("../Src/Img/achtergrondHerfst.png").convert()
+            screen.blit(wolk, (wolk_x, wolk_y))
+
+            #wind harde waaien dus achtergrond sneller
+            backgroundSpeed = 2.8
+
+            # wanneer er geen links of rechts geduwt word (word weg geduwt door de wind)
+            player_rust_right = -5
+
+            # tegen wind in en met wind mee
+            player_speed_left = 20
+            player_speed_right = 2
+
+            #achtergrond kleur score en high score
+            BACK_SCORE = GRAY_AUTUMN
 
         pygame.display.update()
     pygame.quit()
