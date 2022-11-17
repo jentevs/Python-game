@@ -8,29 +8,34 @@ pygame.init()
 VOLUME_MUSIC = 0.5
 VOLUME_FX = 0.4
 mixer.init()
-
-def settings_menu():
-    print("b")
-
-def startscherm():
+def startscherm(volume_music= VOLUME_MUSIC):
     active = False
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
 
+    mixer.music.load('../Src/SoundFx/Jump.mp3')
     mixer.music.load('../Src/Music/Main.mp3')
-    mixer.music.set_volume(VOLUME_MUSIC)
+
+    mixer.music.set_volume(volume_music)
     mixer.music.play(loops=True, fade_ms=500)
     pygame.display.set_icon(pygame.image.load('../Src/Img/NewPiskel1.png'))
 
-    #dim of buttons
+    #dimentions of buttons
     start_pos = pygame.Rect(580,250, 390, 113)
     settings_pos = pygame.Rect(580,360, 390, 113)
     quit_pos = pygame.Rect(580,480, 390, 113)
     back_poss = pygame.Rect(1020,440, 69, 76)
+    btn1 = pygame.Rect(590,300, 82, 80)
+    btn2 = pygame.Rect(670,300, 82, 80)
+    btn3 = pygame.Rect(750,300, 82, 80)
+    btn4 = pygame.Rect(830,300, 82, 80)
+    btn5 = pygame.Rect(910,300, 82, 80)
 
-    #dim of input txt
-    sound_fx_txt = pygame.Rect(590,400, 389, 131)
-    music_vol_txt = pygame.Rect(590,250, 389,131)
+    btn1f = pygame.Rect(590,450, 82, 80)
+    btn2f = pygame.Rect(670,450, 82, 80)
+    btn3f = pygame.Rect(750,450, 82, 80)
+    btn4f = pygame.Rect(830,450, 82, 80)
+    btn5f = pygame.Rect(910,450, 82, 80)
 
     screen = pygame.display.set_mode((1500, 800))
     pygame.display.set_caption("Main Menu")
@@ -62,30 +67,51 @@ def startscherm():
                     screen.fill("black")
                     screen.blit(pygame.image.load("../Src/Img/startscherm.png"), (0, 0))
                     screen.blit(pygame.image.load("../Src/Img/volumeMusic.png"), (590,250))
+                    screen.blit(pygame.image.load("../Src/Img/1.png"), (590,300))
+                    screen.blit(pygame.image.load("../Src/Img/2.png"), (670,300))
+                    screen.blit(pygame.image.load("../Src/Img/3.png"), (750,300))
+                    screen.blit(pygame.image.load("../Src/Img/4.png"), (830,300))
+                    screen.blit(pygame.image.load("../Src/Img/5.png"), (910,300))
                     screen.blit(pygame.image.load("../Src/Img/volumeFx.png"), (590,400))
+                    screen.blit(pygame.image.load("../Src/Img/1f.png"), (590,450))
+                    screen.blit(pygame.image.load("../Src/Img/2f.png"), (670,450))
+                    screen.blit(pygame.image.load("../Src/Img/3f.png"), (750,450))
+                    screen.blit(pygame.image.load("../Src/Img/4f.png"), (830,450))
+                    screen.blit(pygame.image.load("../Src/Img/5f.png"), (910,450))
+
                     screen.blit(pygame.image.load("../Src/Img/buttonBack.png"), (1020,440))
 
                     if event.type == MOUSEBUTTONDOWN:
                         mouse_pos = event.pos
 
-                        #voor de txtbalk
-                        if music_vol_txt.collidepoint(event.pos):
-                            # Toggle the active variable.
-                            active = not active
-                        else:
-                            active = False
-                            # Change the current color of the input box.
-                        color = color_active if active else color_inactive
-                        if event.type == pygame.KEYDOWN:
-                            if active:
-                                if event.key == pygame.K_RETURN:
-                                    print(text)
-                                    text = ''
-                                elif event.key == pygame.K_BACKSPACE:
-                                    text = text[:-1]
-                                else:
-                                    text += event.unicode
+                        #volume kiezen voor muziek
+                        if btn1.collidepoint(mouse_pos):
+                            VOLUME_MUSIC = 0.2
+                            mixer.music.set_volume(0.2)
+                        if btn2.collidepoint(mouse_pos):
+                            VOLUME_MUSIC = 0.4
+                            mixer.music.set_volume(0.4)
+                        if btn3.collidepoint(mouse_pos):
+                            VOLUME_MUSIC = 0.6
+                            mixer.music.set_volume(0.6)
+                        if btn4.collidepoint(mouse_pos):
+                            VOLUME_MUSIC = 0.8
+                            mixer.music.set_volume(0.8)
+                        if btn5.collidepoint(mouse_pos):
+                            VOLUME_MUSIC = 1.0
+                            mixer.music.set_volume(1.0)
 
+                        #volume van de fx
+                        if btn1f.collidepoint(mouse_pos):
+                            VOLUME_FX = 0.2
+                        if btn2f.collidepoint(mouse_pos):
+                            VOLUME_FX = 0.4
+                        if btn3f.collidepoint(mouse_pos):
+                            VOLUME_FX = 0.6
+                        if btn4f.collidepoint(mouse_pos):
+                            VOLUME_FX = 0.8
+                        if btn5f.collidepoint(mouse_pos):
+                            VOLUME_FX = 1.0
                         #voor terug te gaan
                         if back_poss.collidepoint(mouse_pos):
                             break
@@ -102,7 +128,6 @@ def game():
     #######################################################################################
     #                                  VARIABLE                                           #
     #######################################################################################
-
 
     #speedzz
     speed_BG = 100
@@ -239,7 +264,7 @@ def game():
 
     #play the musc
     #mixer.music.load('../Src/Music/lvl1.mp3')
-    #mixer.music.set_volume(VOLUME_MUSIC)
+    #mixer.music.set_volume()
     #mixer.music.play(loops=True, fade_ms=500)
 
 
