@@ -23,7 +23,8 @@ def startscherm(volume_music= VOLUME_MUSIC):
     #dimentions of buttons
     start_pos = pygame.Rect(580,250, 390, 113)
     settings_pos = pygame.Rect(580,360, 390, 113)
-    quit_pos = pygame.Rect(580,480, 390, 113)
+    btntut_but = pygame.Rect(580,480, 390, 113)
+    quit_pos = pygame.Rect(580,570, 390, 113)
     back_poss = pygame.Rect(1020,440, 69, 76)
     btn1 = pygame.Rect(590,300, 82, 80)
     btn2 = pygame.Rect(670,300, 82, 80)
@@ -36,6 +37,7 @@ def startscherm(volume_music= VOLUME_MUSIC):
     btn3f = pygame.Rect(750,450, 82, 80)
     btn4f = pygame.Rect(830,450, 82, 80)
     btn5f = pygame.Rect(910,450, 82, 80)
+
 
     screen = pygame.display.set_mode((1500, 800))
     pygame.display.set_caption("Main Menu")
@@ -53,7 +55,8 @@ def startscherm(volume_music= VOLUME_MUSIC):
         screen.blit(pygame.image.load("../Src/Img/startscherm.png"), (0, 0))
         screen.blit(pygame.image.load("../Src/Img/buttonPlay.png"),(580,250))
         screen.blit(pygame.image.load("../Src/Img/buttonSetting.png"),(580,360))
-        screen.blit(pygame.image.load("../Src/Img/buttonQuit.png"),(580,480))
+        screen.blit(pygame.image.load("../Src/Img/tutkey.png"),(580,465))
+        screen.blit(pygame.image.load("../Src/Img/buttonQuit.png"),(580,570))
 
         #buttons
         if event.type == MOUSEBUTTONDOWN:
@@ -115,6 +118,25 @@ def startscherm(volume_music= VOLUME_MUSIC):
                         #voor terug te gaan
                         if back_poss.collidepoint(mouse_pos):
                             break
+
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            sys.exit()
+                    pygame.display.update()
+            elif btntut_but.collidepoint(mouse_pos):
+                while True:
+                    #In de settings
+                    screen.fill("black")
+                    screen.blit(pygame.image.load("../Src/Img/handleidingKeys.png"), (0,0))
+                    screen.blit(pygame.image.load("../Src/Img/buttonBack.png"), (1020,440))
+
+                    if event.type == MOUSEBUTTONDOWN:
+                        mouse_pos = event.pos
+
+                        #voor terug te gaan
+                        if back_poss.collidepoint(mouse_pos):
+                            break
+
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
                             sys.exit()

@@ -1,1 +1,0 @@
-#hier komen alle eigenschappen van een block
